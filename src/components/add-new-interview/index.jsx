@@ -20,6 +20,7 @@ import { initializeDb } from "@/config/db";
 import { MockInterview } from "@/utils/schema";
 import { useUser } from "@clerk/nextjs";
 import moment from "moment";
+import { useRouter } from "next/navigation";
 
 const schema = z.object({
   jobRole: z.string().min(1, "Job role is required"),
@@ -31,10 +32,12 @@ const schema = z.object({
 });
 
 function AddNewInterview() {
+
   const [open, setOpenDialog] = useState(false);
   const [loading, setLoading] = useState(false);
   const { user } = useUser();
   const [db, setDb] = useState(null);
+  const router =useRouter();
 
   useEffect(() => {
     async function setupDb() {
@@ -92,16 +95,16 @@ function AddNewInterview() {
           .returning({ mockId: MockInterview.mockId });
 
         console.log("Inserted: ", savedb);
-        reset(); // Reset form after successful submission
+        setLoading(false);
+        setOpenDialog(false);
+        router.push("/dashboard/interview/"+savedb[0]?.mockId)
+        reset(); 
       } else {
         console.log("Error, failed to insert");
       }
     } catch (error) {
       console.error("Error during submission:", error);
-    } finally {
-      setLoading(false);
-      setOpenDialog(false);
-    }
+    } 
   };
 
   return (

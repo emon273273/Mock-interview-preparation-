@@ -6,8 +6,11 @@ import { eq } from "drizzle-orm";
 import { Lightbulb, WebcamIcon } from "lucide-react";
 import Webcam from "react-webcam";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
+
 
 function Interview({ params }) {
+    
   const [db, setDb] = useState(null);
   const [interviewdata, setInterViewData] = useState([0]);
   const [webCamEnagble, setWebCamEnable] = useState(false);
@@ -69,7 +72,7 @@ function Interview({ params }) {
                 Disable Camera And Microphone
               </Button>
             )}
-            <Button disabled={!webCamEnagble}>Start interview</Button>
+            <Link href={`/dashboard/interview/${params.interviewid}/start`}><Button disabled={!webCamEnagble}>Start interview</Button></Link>
           </div>
         </div>
 
